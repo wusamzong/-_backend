@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="form">
+    <button onclick="readHandler()" >read</button>
+  </div>
+  <div class="form">
+    <button onclick="insertHandler()">create</button>
+    <label for="title">title</label>
+    <input id="create_title" type="text" name="title">
+    <label for="body">body</label>
+    <input id="create_body" type="text" name="body">
+    <label for="author">author</label>
+    <input id="create_author" type="text" name="author">
+  </div>
+  <div class="form">
+    <button onclick="updateHandler()">update</button>
+    <label for="id">id</label>
+    <input id="update_id" type="number" name="id">
+    <label for="title">title</label>
+    <input id="update_title" type="text" name="title">
+    <label for="body">body</label>
+    <input id="update_body" type="text" name="body">
+    <label for="author">author</label>
+    <input id="update_author" type="text" name="author">
+  </div>
+  <div class="form">
+    <button onclick="deleteHandler()">delete</button>
+    <label for="id">id</label>
+    <input id="delete_id" type="number" name="id">
+  </div>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous"></script>
+  <script>
+      let url = 'http://localhost'
+      function readHandler(){
+        axios.get(url+'/數位桌遊_後端/read.php?id=2')
+          .then((res) => { console.table(res.data) })
+          .catch((error) => { console.error(error) })
+      }
+      function insertHandler(){
+        let title = document.getElementById('create_title').value
+        let body = document.getElementById('create_body').value
+        let author = document.getElementById('create_author').value
+        let data ={title:title, body:body,author:author}
+        axios.post(url+'/數位桌遊_後端/insert.php',data)
+          .then((res) => { console.table(res.data) })
+          .catch((error) => { console.error(error) })
+      }
+      function updateHandler(){
+        let id = document.getElementById('update_id').value
+        let title = document.getElementById('update_title').value
+        let body = document.getElementById('update_body').value
+        let author = document.getElementById('update_author').value
+        let data={id:id, title:title, body:body, author:author}
+        for (const property in data) { //偵測哪一個資料沒有值
+          if(data[property]==""){
+            delete data[property];
+          }
+        }
+        axios.post(url+'/數位桌遊_後端/update.php?id='+id,data)
+          .then((res) => { console.table(res.data) })
+          .catch((error) => { console.error(error) })
+      }
+      function deleteHandler(){
+        let id = document.getElementById('delete_id').value
+        let data={id:id}
+        axios.post(url+'/數位桌遊_後端/delete.php?id='+id,data)
+          .then((res) => { console.table(res.data) })
+          .catch((error) => { console.error(error) })
+      }
+
+  </script>
+</body>
+</html>
